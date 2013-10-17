@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd">
+        
+    <!-- objetos de negocio -->    
+    <import resource="POJOs.xml"/>
+        
+    <!--<bean id="contenedor_operadores" class="es.ujaen.dae.galisteo_ruiz.hoteles.ContenedorOperadores" />-->
+</beans>

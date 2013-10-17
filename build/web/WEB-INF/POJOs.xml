@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd">
+        
+    <!-- objetos de negocio -->
+    <bean id="administrador" class="es.ujaen.dae.galisteo_ruiz.hoteles.beans.ServicioAdministrador">
+       <property name="listaHoteles">
+            <map>
+                <entry key="11111111A">
+                    <bean class="es.ujaen.dae.galisteo_ruiz.hoteles.Hotel">
+                        <property name="CIF" value="11111111A"/>
+                        <property name="nombre" value="Hotel 1"/>
+                        <property name="direccion" value="Dirección 1"/>
+                        <property name="ciudad" value="Ciudad 1"/>
+                    </bean>
+                </entry>
+                <entry key="22222222B">
+                    <bean class="es.ujaen.dae.galisteo_ruiz.hoteles.Hotel">
+                        <property name="CIF" value="22222222B"/>
+                        <property name="nombre" value="Hotel 2"/>
+                        <property name="direccion" value="Dirección 2"/>
+                        <property name="ciudad" value="Ciudad 2"/>
+                    </bean>
+                </entry>
+                <entry key="33333333B">
+                    <bean class="es.ujaen.dae.galisteo_ruiz.hoteles.Hotel">
+                        <property name="CIF" value="33333333B"/>
+                        <property name="nombre" value="Hotel 3"/>
+                        <property name="direccion" value="Dirección 3"/>
+                        <property name="ciudad" value="Ciudad 3"/>
+                    </bean>
+                </entry>
+            </map>
+        </property>
+        
+        <property name="listaOperadores">
+            <map>
+                <entry key="444A">
+                    <bean class="es.ujaen.dae.galisteo_ruiz.hoteles.Operador">
+                        <property name="CIF" value="444A"/>
+                        <property name="nombre" value="Operador 1"/>
+                        <property name="direccion" value="Dirección 1"/>
+                    </bean>
+                </entry>
+                <entry key="555B">
+                    <bean class="es.ujaen.dae.galisteo_ruiz.hoteles.Operador">
+                        <property name="CIF" value="555B"/>
+                        <property name="nombre" value="Operador 2"/>
+                        <property name="direccion" value="Dirección 2"/>
+                    </bean>
+                </entry>
+            </map>
+        </property>
+    </bean>
+    
+    
+    <bean id="operador" class="es.ujaen.dae.galisteo_ruiz.hoteles.beans.ServicioOperador">
+    </bean>
+    
+    <bean id="hotel" class="es.ujaen.dae.galisteo_ruiz.hoteles.beans.ServicioHotel"> 
+        
+    </bean>
+</beans>
