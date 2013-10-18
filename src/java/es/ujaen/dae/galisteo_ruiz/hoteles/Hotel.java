@@ -5,6 +5,7 @@
 package es.ujaen.dae.galisteo_ruiz.hoteles;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -22,6 +23,22 @@ public class Hotel {
     private String CIF;
     //cada posición del vector representa el número de individuales, dobles y triples
     private int[] numHabitaciones = new int[3];
+
+    public int[] getNumHabitaciones() {
+        return numHabitaciones;
+    }
+
+    public void setNumHabitaciones(int[] numHabitaciones) {
+        this.numHabitaciones = numHabitaciones;
+    }
+
+    public float[] getPrecioHabitaciones() {
+        return precioHabitaciones;
+    }
+
+    public void setPrecioHabitaciones(float[] precioHabitaciones) {
+        this.precioHabitaciones = precioHabitaciones;
+    }
     //cada posición del vector representa el precio de hab individual, doble y triple
     private float[] precioHabitaciones = new float[3];
     private List<Reserva> reservas;
@@ -71,8 +88,31 @@ public class Hotel {
         this.ciudad = ciudad;
     }
 
+    public boolean hayPlazas(int numHab, int tipoHab, Date fIni, Date fFin){
+        int counter=0;
+        boolean hay=true;
+        for(Reserva r: getReservas()){
+            if(r.getTipoHab() == tipoHab){
+                if(r.getFecIni().compareTo(fIni)>=0 && r.getFecIni().compareTo(fFin)<=0){
+                    //si la reserva empieza dentro del períoro de tiempo especificado
+                    counter+=r.getNumHabitaciones();
+                }else{
+                    if(r.getFecFin().compareTo(fIni)>=0 && r.getFecFin().compareTo(fFin)<=0){
+                        //si la reserva termina dentro del períoro de tiempo especificado
+                        counter+=r.getNumHabitaciones();
+                    }
+                }
+                //si tengo menos reservas en ese período que habitaciones totales --> Tengo libres
+                if(counter+numHab>getNumHabitaciones()[tipoHab]){
+                    hay=false;
+                }
+            }            
+       }
+        return hay;
+    }
+    
     public Hotel() {
-        numHabitaciones[0]=3; numHabitaciones[1]=5; numHabitaciones[2]=7;
+        numHabitaciones[0]=11; numHabitaciones[1]=1; numHabitaciones[2]=1;
         precioHabitaciones[0]=20; precioHabitaciones[1]=30; precioHabitaciones[2]=40;
         reservas = new ArrayList<Reserva>();
     }
