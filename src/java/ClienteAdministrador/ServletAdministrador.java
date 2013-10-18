@@ -6,9 +6,13 @@ package ClienteAdministrador;
  */
 
 import es.ujaen.dae.galisteo_ruiz.hoteles.Hotel;
+import es.ujaen.dae.galisteo_ruiz.hoteles.Operador;
 import es.ujaen.dae.galisteo_ruiz.hoteles.beans.ServicioAdministrador;
+import es.ujaen.dae.galisteo_ruiz.hoteles.excepciones.ErrorInsercion;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -35,7 +39,7 @@ public class ServletAdministrador extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException, Exception {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         try {
@@ -50,14 +54,21 @@ public class ServletAdministrador extends HttpServlet {
             WebApplicationContext appContext = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
             ServicioAdministrador sa = (ServicioAdministrador) appContext.getBean("servicioAdministrador");
             
-            out.println(sa.getListaHoteles().size());
-            //prueba creación de objetos
-            Hotel hot = new Hotel();
-            sa.getAdmin().altaHotel(hot);
-            //prueba borrado de objetos
-            sa.getAdmin().bajaHotel("11111111A");
-            sa.getAdmin().bajaHotel("22222222B");
-            out.println(sa.getListaHoteles().size());
+//            out.println(sa.getListaHoteles().size());
+//            //prueba creación de objetos
+//            Hotel hot = new Hotel();
+//            sa.getAdmin().altaHotel(hot);
+//            //prueba borrado de objetos
+//            sa.getAdmin().bajaHotel("11111111A");
+//            sa.getAdmin().bajaHotel("22222222B");
+//            out.println(sa.getListaHoteles().size());
+            
+            try{
+                Operador op = new Operador("444A", "david", "direccion");
+                sa.getAdmin().altaOperador(op);
+            }catch(ErrorInsercion e){
+                out.println(e.getMessage());
+            }
             
             
             
@@ -82,7 +93,11 @@ public class ServletAdministrador extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (Exception ex) {
+            Logger.getLogger(ServletAdministrador.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -97,7 +112,11 @@ public class ServletAdministrador extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (Exception ex) {
+            Logger.getLogger(ServletAdministrador.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
