@@ -98,9 +98,6 @@ public class Operador {
         }
         return listaPorNombre;
     }
-
-    
-    //CAMBIAR A LA CLASE HOTEL ////////////////////////////////////////////////////////////////////////////////////
     
 
     public List<Hotel> bucarPorFecha(int tipoHab, Date fIni, Date fFin){    /////////////////////////////////////////
