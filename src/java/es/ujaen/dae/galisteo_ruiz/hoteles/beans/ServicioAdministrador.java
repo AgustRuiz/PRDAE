@@ -7,7 +7,7 @@ import java.util.Map;
 
 /**
  *
- * @author juanpepe
+ * @author David Galisteo Cantero (dgc00027@red.ujaen.es)
  * @author Agustín Ruiz Linares (arl00029@red.ujaen.es)
  */
 public class ServicioAdministrador {
@@ -80,58 +80,51 @@ public class ServicioAdministrador {
     }
 
     /**
-     * Dar de alta un operador
+     * Alta de un operador
      *
-     * @param nombre Nombre del operador
-     * @param CIF CIF del operador
-     * @param direccion Dirección del operador
+     * @param op Operador
      * @return true si se ha dado de alta el operador o false en caso contrario
      */
-    public boolean altaOperador(String nombre, String CIF, String direccion) {
-        Operador op_aux = new Operador(CIF, direccion, nombre);
-
-        //comprobar que no exista
-        try {
-            this.listaOperadores.put(CIF, op_aux);
-        } catch (Exception e) {
+    public boolean altaOperador(Operador op) {
+        //compruebo que no existe, y en ese caso, lo inserto en el mapa
+        Operador opAux = listaOperadores.get(op.getCIF());
+        if(opAux == null){
+            listaOperadores.put(op.getCIF(), op);
+        }else{
             return false;
         }
-
         return true;
     }
 
     /**
-     * Dar de baja un operador
+     * Baja de un operador
      *
      * @param CIF CIF del operador
      * @return true si se ha dado de baja el operador o false en caso contrario
      */
-    public boolean bajaOperador(int CIF) {
-        Operador op_aux = this.listaOperadores.get(CIF);
-
-        if (op_aux == null) {
+    public boolean bajaOperador(String CIF) {
+        //compruebo si existe y en ese caso lo elimino
+        Operador opAux = listaOperadores.get(CIF);
+        if (opAux == null) {
             return false;
-        }
-
-        try {
-            this.listaOperadores.remove(op_aux);
-        } catch (Exception e) {
-            return false;
+        }else{
+            listaOperadores.remove(CIF);
         }
         return true;
     }
 
     /**
-     * Da de alta un hotel
+     * Alta de un hotel
      *
      * @param hot Hotel
      * @return true si se ha dado de alta el hotel o false en caso contrario
      */
     public boolean altaHotel(Hotel hot) {
-        //comprobar que no exista
-        try {
-            this.listaHoteles.put(hot.getCIF(), hot);
-        } catch (Exception e) {
+        //compruebo que no exista y lo inserto en ese caso
+        Hotel hotAux = listaHoteles.get(hot.getCIF());
+        if(hotAux == null){
+            listaHoteles.put(hot.getCIF(), hot);
+        }else{
             return false;
         }
         return true;
@@ -144,17 +137,13 @@ public class ServicioAdministrador {
      * @return true si se ha dado de baja correctamente o false en caso
      * contrario
      */
-    public boolean bajaHotel(int CIF) {
-        Hotel hot_aux = this.listaHoteles.get(CIF);
-
-        if (hot_aux == null) {
+    public boolean bajaHotel(String CIF) {
+        //compruebo su existencia y lo elimino en caso de que exista
+        Hotel hotAux = listaHoteles.get(CIF);
+        if (hotAux == null) {
             return false;
-        }
-
-        try {
-            this.listaHoteles.remove(hot_aux);
-        } catch (Exception e) {
-            return false;
+        }else{
+            ServicioAdministrador.listaHoteles.remove(CIF);
         }
         return true;
     }

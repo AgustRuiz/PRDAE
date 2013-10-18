@@ -19,7 +19,9 @@ public class Hotel {
     private String direccion;
     private String ciudad;
     private String CIF;
+    //cada posición del vector representa el número de individuales, dobles y triples
     private int[] numHabitaciones = new int[3];
+    //cada posición del vector representa el precio de hab individual, doble y triple
     private float[] precioHabitaciones = new float[3];
     private List<Reserva> reservas;
 

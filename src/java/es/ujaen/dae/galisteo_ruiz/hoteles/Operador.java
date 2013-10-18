@@ -45,9 +45,9 @@ public class Operador {
     }
     
     public Operador(String cif, String nomb, String dir){
-        CIF=cif;
-        nombre=nomb;
-        direccion=dir;
+        CIF = cif;
+        nombre = nomb;
+        direccion = dir;
     }
     
 }
