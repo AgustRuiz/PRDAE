@@ -31,11 +31,7 @@ public class Hotel {
     }
     
     public boolean reserva(Reserva res){
-        try{
-            reservas.add(res);
-        }catch(Exception e){
-            return false;
-        }
+        reservas.add(res);
         return true;
     }
     
@@ -76,6 +72,9 @@ public class Hotel {
     }
 
     public Hotel() {
+        numHabitaciones[0]=3; numHabitaciones[1]=5; numHabitaciones[2]=7;
+        precioHabitaciones[0]=20; precioHabitaciones[1]=30; precioHabitaciones[2]=40;
+        reservas = new ArrayList<Reserva>();
     }
 
     public Hotel(String cif, String nom, String dir, String ciu, int[] n_hab, float[] p_hab) {
