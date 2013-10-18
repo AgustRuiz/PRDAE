@@ -53,8 +53,11 @@ public class ServicioAdministrador {
         ServicioAdministrador.listaOperadores = listaOperadores;
     }
 
-    
-    ServicioAdministrador(){
+    /**
+     * Constructor por defecto
+     *
+     */
+    public ServicioAdministrador(){
         
     }
     
