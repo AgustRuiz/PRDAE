@@ -53,7 +53,7 @@ public class ServletAdministrador extends HttpServlet {
             out.println(sa.getListaHoteles().size());
             
             
-            //Hotel hot = new Hotel();
+            Hotel hot = new Hotel();
             //sa.altaHotel(hot);
             
             out.println(sa.getListaHoteles().size());
