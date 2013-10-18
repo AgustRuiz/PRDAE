@@ -38,6 +38,9 @@ public class Usuario {
         this.direccion = direccion;
     }
     
+    Usuario(){
+        
+    }
     
     public Usuario (String dn, String nom, String dir){
         DNI=dn;

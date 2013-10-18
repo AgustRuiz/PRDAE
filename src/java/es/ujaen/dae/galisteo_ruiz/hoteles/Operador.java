@@ -121,7 +121,6 @@ public class Operador {
 
     public List<Hotel> bucarPorFecha(Date fIni, Date fFin){    /////////////////////////////////////////
         ArrayList<Hotel> listaPorFecha = new ArrayList<Hotel>();
-
         //recorro la lista de hoteles buscando entre sus reservas
         Hotel hot;
         for(Map.Entry<String, Hotel> e: ServicioOperador.getListaHoteles().entrySet()){
@@ -135,7 +134,6 @@ public class Operador {
 
     public boolean realizar_reserva(Usuario usu,Hotel hot,int num_hab, Date fIni, Date fFin){
         //debo comprobar si las reservas para ese momento están completas en ese hotel concreto
-
         if(hayPlazas(hot,fIni,fFin)){
             Reserva res = new Reserva(usu, fIni, fFin, num_hab);
             hot.reserva(res);

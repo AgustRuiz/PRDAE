@@ -48,15 +48,18 @@ public class ServletAdministrador extends HttpServlet {
             out.println("<body>");
             
             WebApplicationContext appContext = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
-            ServicioAdministrador sa = (ServicioAdministrador) appContext.getBean("administrador");
+            ServicioAdministrador sa = (ServicioAdministrador) appContext.getBean("servicioAdministrador");
             
             out.println(sa.getListaHoteles().size());
-            
-            
+            //prueba creación de objetos
             Hotel hot = new Hotel();
-            //sa.altaHotel(hot);
-            
+            sa.getAdmin().altaHotel(hot);
+            //prueba borrado de objetos
+            sa.getAdmin().bajaHotel("11111111A");
+            sa.getAdmin().bajaHotel("22222222B");
             out.println(sa.getListaHoteles().size());
+            
+            
             
             out.println("<h1>Servlet Servlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
