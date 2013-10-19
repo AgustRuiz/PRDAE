@@ -28,6 +28,7 @@ public class Administrador {
      * Alta de un operador
      *
      * @param op Operador
+     * @throws Exception
      */
     public void altaOperador(Operador op) throws Exception {
         //compruebo que no existe, y en ese caso, lo inserto en el mapa
@@ -42,7 +43,8 @@ public class Administrador {
     /**
      * Baja de un operador
      *
-     * @param CIF CIF del operador
+     * @param CIF 
+     * @throws Exception
      */
     public void bajaOperador(String CIF) throws Exception {
         //compruebo si existe y en ese caso lo elimino
@@ -58,6 +60,7 @@ public class Administrador {
      * Alta de un hotel
      *
      * @param hot Hotel
+     * @throws Exception
      */
     public void altaHotel(Hotel hot) throws Exception {
         //compruebo que no exista y lo inserto en ese caso
@@ -72,7 +75,8 @@ public class Administrador {
     /**
      * Baja de un hotel
      *
-     * @param CIF CIF del hotel a dar de baja
+     * @param CIF
+     * @throws Exception
      */
     public void bajaHotel(String CIF) throws Exception {
         //compruebo su existencia y lo elimino en caso de que exista

@@ -71,9 +71,9 @@ public class ServletOperador extends HttpServlet {
             Date f2 = sdf.parse("2013-10-20");
             Usuario usu = ServicioOperador.getListaUsuarios().get("00000A");
             Hotel hot = ServicioOperador.getListaHoteles().get("22222222B");
-            op.realizar_reserva(usu, hot, 6, 0, f1, f2);
-            op.realizar_reserva(usu, hot, 1, 0, f1, f2);
-            op.realizar_reserva(usu, hot, 1, 1, f1, f2);
+            op.realizarReserva(usu, hot, 6, 0, f1, f2);
+            op.realizarReserva(usu, hot, 1, 0, f1, f2);
+            op.realizarReserva(usu, hot, 1, 1, f1, f2);
             out.println("Reservas en hotel: "+ServicioOperador.getListaHoteles().get("22222222B").getReservas().size());
             
             out.println("<h1>Servlet ServletOperador at " + request.getContextPath() + "</h1>");
