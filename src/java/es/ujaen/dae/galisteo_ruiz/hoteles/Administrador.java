@@ -55,6 +55,7 @@ public class Administrador {
             ServicioAdministrador.getListaOperadores().remove(CIF);
         }
     }
+    
 
     /**
      * Alta de un hotel
@@ -87,5 +88,6 @@ public class Administrador {
             ServicioAdministrador.getListaHoteles().remove(CIF);
         }
     }
+    
     
 }
