@@ -7,9 +7,15 @@ and open the template in the editor.
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd">
+    
+
+    <bean id="administrador" class="es.ujaen.dae.galisteo_ruiz.hoteles.Administrador">
         
-    <!-- objetos de negocio -->
-    <bean id="administrador" class="es.ujaen.dae.galisteo_ruiz.hoteles.beans.ServicioAdministrador">
+    </bean>
+    
+    <!-- Servicio Administrador -->
+    <bean id="servicioAdministrador" class="es.ujaen.dae.galisteo_ruiz.hoteles.beans.ServicioAdministrador">
+        <property name="admin" ref="administrador"></property>
        <property name="listaHoteles">
             <map>
                 <entry key="11111111A">
@@ -59,11 +65,29 @@ and open the template in the editor.
         </property>
     </bean>
     
-    
-    <bean id="operador" class="es.ujaen.dae.galisteo_ruiz.hoteles.beans.ServicioOperador">
+    <!-- Servicio Operador -->
+    <bean id="servicioOperador" class="es.ujaen.dae.galisteo_ruiz.hoteles.beans.ServicioOperador">
+        <property name="listaUsuarios">
+            <map>
+                <entry key="00000A">
+                    <bean class="es.ujaen.dae.galisteo_ruiz.hoteles.Usuario">
+                        <property name="DNI" value="00000A"/>
+                        <property name="nombre" value="Usuario 1"/>
+                        <property name="direccion" value="Dirección 1"/>
+                    </bean>
+                </entry>
+                <entry key="1111B">
+                    <bean class="es.ujaen.dae.galisteo_ruiz.hoteles.Usuario">
+                        <property name="DNI" value="1111B"/>
+                        <property name="nombre" value="Usuario 2"/>
+                        <property name="direccion" value="Dirección 2"/>
+                    </bean>
+                </entry>
+            </map>
+        </property>
     </bean>
     
-    <bean id="hotel" class="es.ujaen.dae.galisteo_ruiz.hoteles.beans.ServicioHotel"> 
-        
+    <!-- Servicio Hotel -->
+    <bean id="servicioHotel" class="es.ujaen.dae.galisteo_ruiz.hoteles.beans.ServicioHotel"> 
     </bean>
 </beans>
