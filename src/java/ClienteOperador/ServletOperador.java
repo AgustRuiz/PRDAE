@@ -74,15 +74,15 @@ public class ServletOperador extends HttpServlet {
 //            //vamos a probar las reservas
             Operador op = ServicioAdministrador.getListaOperadores().get("444A");
             //creo 2 fechas
-            SimpleDateFormat sdff = new SimpleDateFormat("yyyy-MM-dd");
-            Date f11 = sdff.parse("2013-10-11");
-            Date f22 = sdff.parse("2013-10-20");
-            Usuario usuario = ServicioOperador.getListaUsuarios().get("00000A");
-            Hotel hot = ServicioOperador.getListaHoteles().get("22222222B");
-            op.realizarReserva(usuario, hot, 6, 0, f11, f22);
-            op.realizarReserva(usuario, hot, 1, 0, f11, f22);
-            hot = ServicioOperador.getListaHoteles().get("11111111A");
-            op.realizarReserva(usuario, hot, 1, 1, f11, f22);
+//            SimpleDateFormat sdff = new SimpleDateFormat("yyyy-MM-dd");
+//            Date f11 = sdff.parse("2013-10-11");
+//            Date f22 = sdff.parse("2013-10-20");
+//            Usuario usuario = ServicioOperador.getListaUsuarios().get("00000A");
+//            Hotel hot = ServicioOperador.getListaHoteles().get("22222222B");
+//            op.realizarReserva(usuario, hot, 6, 0, f11, f22);
+//            op.realizarReserva(usuario, hot, 1, 0, f11, f22);
+//            hot = ServicioOperador.getListaHoteles().get("11111111A");
+//            op.realizarReserva(usuario, hot, 1, 1, f11, f22);
 //            out.println("Reservas en hotel: " + ServicioOperador.getListaHoteles().get("22222222B").getReservas().size());
 
             
@@ -222,7 +222,7 @@ public class ServletOperador extends HttpServlet {
                             if(op.realizarReserva(u, h, num, tip, f1, f2)){
                                 out.println("<strong>Reserva realizada con éxito</strong>");
                             }else{
-                                out.println("No hay plazas para su reserva");
+                                out.println("<strong>No hay plazas para su reserva</strong>");
                             }
                         }else{
                             out.println("El usuario no existe");

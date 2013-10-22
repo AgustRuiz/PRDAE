@@ -149,23 +149,27 @@ public class Hotel {
     public boolean hayPlazas(int numHab, int tipoHab, Date fIni, Date fFin){
         int counter=0;
         boolean hay=true;
-        for(Reserva r: getReservas()){
-            if(r.getTipoHab() == tipoHab){
-                if(r.getFecIni().compareTo(fIni)>=0 && r.getFecIni().compareTo(fFin)<=0){
-                    //si la reserva empieza dentro del períoro de tiempo especificado
-                    counter+=r.getNumHabitaciones();
-                }else{
-                    if(r.getFecFin().compareTo(fIni)>=0 && r.getFecFin().compareTo(fFin)<=0){
-                        //si la reserva termina dentro del períoro de tiempo especificado
+        if(numHab>getNumHabitaciones()[tipoHab]){
+            hay = false;
+        }else{
+            for(Reserva r: getReservas()){
+                if(r.getTipoHab() == tipoHab){
+                    if(r.getFecIni().compareTo(fIni)>=0 && r.getFecIni().compareTo(fFin)<=0){
+                        //si la reserva empieza dentro del períoro de tiempo especificado
                         counter+=r.getNumHabitaciones();
+                    }else{
+                        if(r.getFecFin().compareTo(fIni)>=0 && r.getFecFin().compareTo(fFin)<=0){
+                            //si la reserva termina dentro del períoro de tiempo especificado
+                            counter+=r.getNumHabitaciones();
+                        }
                     }
-                }
-                //si tengo menos reservas en ese período que habitaciones totales --> Tengo libres
-                if(counter+numHab>getNumHabitaciones()[tipoHab]){
-                    hay=false;
-                }
-            }            
-       }
+                    //si tengo menos reservas en ese período que habitaciones totales --> Tengo libres
+                    if(counter+numHab>getNumHabitaciones()[tipoHab]){
+                        hay=false;
+                    }
+                }            
+           }
+        }
         return hay;
     }
     

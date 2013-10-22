@@ -172,7 +172,7 @@ public class Operador {
         for(Map.Entry<String, Hotel> e: ServicioOperador.getListaHoteles().entrySet()){
             hot=e.getValue();
             //recorro la lista de reservas del hotel y cuento las reservas que COINCIDEN en el período de tiempo
-            if(hot.hayPlazas(tipoHab, 0, fIni, fFin))
+            if(hot.hayPlazas(1,tipoHab, fIni, fFin))
                 listaPorFecha.add(hot);
         }
         return listaPorFecha;
