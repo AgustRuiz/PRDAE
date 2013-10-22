@@ -26,6 +26,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
@@ -63,6 +64,10 @@ public class ServletOperador extends HttpServlet {
             WebApplicationContext appContext = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
             ServicioOperador so = (ServicioOperador) appContext.getBean("servicioOperador");
 
+            
+        
+            
+            
             //selecciono un operador
 //            Operador op = so.getListaOperadores().get("444A");
 //            out.println(op.getNombre());
@@ -72,7 +77,6 @@ public class ServletOperador extends HttpServlet {
 //            out.println("Busqueda por Hotel1, elementos: " + op.buscarPorNombre("Hotel 1").size());
 //
 //            //vamos a probar las reservas
-            Operador op = ServicioAdministrador.getListaOperadores().get("444A");
             //creo 2 fechas
 //            SimpleDateFormat sdff = new SimpleDateFormat("yyyy-MM-dd");
 //            Date f11 = sdff.parse("2013-10-11");
@@ -104,6 +108,10 @@ public class ServletOperador extends HttpServlet {
 //                out.println("<div><label>CIF operador: <input type=\"text\" name=\"loginOp\" /></label></div>");
 //                out.println("<div><input type=\"submit\" name=\"lusu\" value=\"Login\"/><input type=\"reset\" value=\"Limpiar formulario\"/></div>");
 //                out.println("</form>");
+            
+            
+            
+            Operador op = ServicioAdministrador.getListaOperadores().get("444A");
 
             //if(op != null){
                 //Get la string acction
