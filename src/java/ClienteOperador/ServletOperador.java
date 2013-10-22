@@ -6,6 +6,7 @@ package ClienteOperador;
 
 import es.ujaen.dae.galisteo_ruiz.hoteles.Hotel;
 import es.ujaen.dae.galisteo_ruiz.hoteles.Operador;
+import es.ujaen.dae.galisteo_ruiz.hoteles.Reserva;
 import es.ujaen.dae.galisteo_ruiz.hoteles.Usuario;
 import es.ujaen.dae.galisteo_ruiz.hoteles.beans.ServicioAdministrador;
 import es.ujaen.dae.galisteo_ruiz.hoteles.beans.ServicioOperador;
@@ -71,18 +72,20 @@ public class ServletOperador extends HttpServlet {
 //            out.println("Busqueda por Hotel1, elementos: " + op.buscarPorNombre("Hotel 1").size());
 //
 //            //vamos a probar las reservas
-//            //creo 2 fechas
-//            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-//            Date f1 = sdf.parse("2013-10-11");
-//            Date f2 = sdf.parse("2013-10-20");
-//            Usuario usu = ServicioOperador.getListaUsuarios().get("00000A");
-//            Hotel hot = ServicioOperador.getListaHoteles().get("22222222B");
-//            op.realizarReserva(usu, hot, 6, 0, f1, f2);
-//            op.realizarReserva(usu, hot, 1, 0, f1, f2);
-//            op.realizarReserva(usu, hot, 1, 1, f1, f2);
+            Operador op = ServicioAdministrador.getListaOperadores().get("444A");
+            //creo 2 fechas
+            SimpleDateFormat sdff = new SimpleDateFormat("yyyy-MM-dd");
+            Date f11 = sdff.parse("2013-10-11");
+            Date f22 = sdff.parse("2013-10-20");
+            Usuario usuario = ServicioOperador.getListaUsuarios().get("00000A");
+            Hotel hot = ServicioOperador.getListaHoteles().get("22222222B");
+            op.realizarReserva(usuario, hot, 6, 0, f11, f22);
+            op.realizarReserva(usuario, hot, 1, 0, f11, f22);
+            hot = ServicioOperador.getListaHoteles().get("11111111A");
+            op.realizarReserva(usuario, hot, 1, 1, f11, f22);
 //            out.println("Reservas en hotel: " + ServicioOperador.getListaHoteles().get("22222222B").getReservas().size());
 
-            Operador op = ServicioAdministrador.getListaOperadores().get("444A");
+            
             
 //            boolean login=false;
 //            Operador op = null;
@@ -167,7 +170,7 @@ public class ServletOperador extends HttpServlet {
                         out.println("<td>");
                         out.println("<a href=\"" + request.getContextPath() + request.getServletPath() + "/listadoUsuarios?dniUsuarioEliminar=" + us.getDNI() + "\">Eliminar</a> ");
                         out.println("<a href=\"" + request.getContextPath() + request.getServletPath() + "/verReservas?dniUsuarioEliminar=" + us.getDNI() + "\">Ver reservas</a> ");
-                        out.println("<a href=\"" + request.getContextPath() + request.getServletPath() + "/realizarReserva?dniUsuarioEliminar=" + us.getDNI() + "\">Realizar reserva</a> ");
+                        //out.println("<a href=\"" + request.getContextPath() + request.getServletPath() + "/realizarReserva?dniUsuarioEliminar=" + us.getDNI() + "\">Realizar reserva</a> ");
                         out.println("</td>");
                         out.println("</tr>");
                     }
@@ -176,7 +179,31 @@ public class ServletOperador extends HttpServlet {
                 } else if (action.equals("/verReservas")) {
                     String dniUser = request.getParameter("dniUsuarioEliminar");
                     out.println("<h2>Reservas del usuario "+dniUser+"</h2>");
-                    //if()
+                    Usuario usu = ServicioOperador.getListaUsuarios().get(dniUser);
+                    ArrayList<Reserva> listadoReservas;
+                    listadoReservas = (ArrayList<Reserva>) usu.getListaReservas();
+                        out.println("<table border=\"1\">");
+                        out.println("<tr>");
+                        out.println("<th>CIF Hotel</th>");
+                        out.println("<th>Fecha inicio</th>");
+                        out.println("<th>Fecha fin</th>");
+                        out.println("<th>Número de habitaciones</th>");
+                        out.println("<th>Tipo de habitaciones</th>");
+                        out.println("</tr>");
+                        Reserva[] valor;
+                        valor = ( Reserva[] )listadoReservas.toArray( new Reserva[ listadoReservas.size() ] );
+                        int i;
+                        for(i=0;i<listadoReservas.size();i++){
+                            out.println("<tr>");
+                            out.println("<td>" + valor[i].getHotel().getCIF() + "</td>");
+                            out.println("<td>" + valor[i].getFecIni() + "</td>");
+                            out.println("<td>" + valor[i].getFecFin() + "</td>");
+                            out.println("<td>" + valor[i].getNumHabitaciones() + "</td>");
+                            out.println("<td>" + valor[i].getTipoHab() + "</td>");
+                            out.println("</td>");
+                            out.println("</tr>");
+                        
+                    }
 
                 } else if (action.equals("/realizarReserva")) {
                     out.println("<h2>Realizar reservas</h2>");

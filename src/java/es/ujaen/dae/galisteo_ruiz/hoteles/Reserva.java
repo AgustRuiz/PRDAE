@@ -9,12 +9,31 @@ import java.util.Date;
  * @author Agustín Ruiz Linares (arl00029@red.ujaen.es)
  */
 public class Reserva {
+    private Hotel hotel;
     private Usuario usuario;
     private Date fecIni;
     private Date fecFin;
     private int numHabitaciones;
     private int tipoHab;
 
+    /**
+     * Obtiene el hotel
+     * 
+     * @return hotel 
+     */
+    public Hotel getHotel() {
+        return hotel;
+    }
+
+    /**
+     * Establece el hotel
+     * 
+     * @param hotel 
+     */
+    public void setHotel(Hotel hotel) {
+        this.hotel = hotel;
+    }
+    
     /**
      * Obtiene el tipo de habitacion
      *
@@ -111,8 +130,10 @@ public class Reserva {
      * @param fIni
      * @param fFin
      * @param num 
+     * @param hot
      */
-    public Reserva(Usuario usu, int tipo, Date fIni, Date fFin, int num){
+    public Reserva(Hotel hot, Usuario usu, int tipo, Date fIni, Date fFin, int num){
+        hotel = hot;
         usuario=usu;
         tipoHab = tipo;
         fecIni = fIni;

@@ -192,8 +192,9 @@ public class Operador {
     public boolean realizarReserva(Usuario usu,Hotel hot, int numHab, int tipoHab, Date fIni, Date fFin){
         //debo comprobar si las reservas para ese momento están completas en ese hotel concreto
         if(hot.hayPlazas(numHab, tipoHab, fIni,fFin)){
-            Reserva res = new Reserva(usu, tipoHab, fIni, fFin, numHab);
+            Reserva res = new Reserva(hot, usu, tipoHab, fIni, fFin, numHab);
             hot.reserva(res);
+            usu.insertarReserva(res);
         }else{
             return false;
         }

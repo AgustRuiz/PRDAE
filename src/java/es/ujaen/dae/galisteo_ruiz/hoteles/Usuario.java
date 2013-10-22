@@ -1,5 +1,8 @@
 package es.ujaen.dae.galisteo_ruiz.hoteles;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author David Galisteo Cantero (dgc00027@red.ujaen.es)
@@ -10,6 +13,34 @@ public class Usuario {
     private String DNI;
     private String nombre;
     private String direccion;
+    private List<Reserva> listaReservas;
+
+    /**
+     * Inseta una nueva Reserva en la lista
+     * 
+     * @param res 
+     */
+    public void insertarReserva(Reserva res){
+        listaReservas.add(res);
+    }
+    
+    /**
+     * Obtiene la lista de reservas del usuario
+     * 
+     * @return listaReservas
+     */
+    public List<Reserva> getListaReservas() {
+        return listaReservas;
+    }
+
+    /**
+     * Establece la lista de reservas del usuario
+     * 
+     * @param listaReservas 
+     */
+    public void setListaReservas(List<Reserva> listaReservas) {
+        this.listaReservas = listaReservas;
+    }
     
     /**
      * Obtiene el DNI del usuario
@@ -69,7 +100,7 @@ public class Usuario {
      * Constructor por defecto
      */
     public Usuario(){
-        
+        listaReservas = new ArrayList<Reserva>();
     }
     
     /**
