@@ -207,7 +207,37 @@ public class ServletOperador extends HttpServlet {
 
                 } else if (action.equals("/realizarReserva")) {
                     out.println("<h2>Realizar reservas</h2>");
-
+                    out.println("Se va a realizar la reserva en el hotel con CIF "+request.getParameter("CIFhotel"));
+                    
+                    if (request.getParameter("dniUsu") != null) {
+                        Usuario u = ServicioOperador.getListaUsuarios().get(request.getParameter("dniUsu"));
+                        if(u != null){
+                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                            Date f1 = sdf.parse(request.getParameter("fIni"));
+                            Date f2 = sdf.parse(request.getParameter("fFin"));
+                            Hotel h = ServicioOperador.getListaHoteles().get(request.getParameter("CIFhotel"));
+                            int num = Integer.parseInt(request.getParameter("numHab"));
+                            int tip = Integer.parseInt(request.getParameter("tipoHab"));
+                            //realizo la reserva
+                            if(op.realizarReserva(u, h, num, tip, f1, f2)){
+                                out.println("<strong>Reserva realizada con éxito</strong>");
+                            }else{
+                                out.println("No hay plazas para su reserva");
+                            }
+                        }else{
+                            out.println("El usuario no existe");
+                        }
+                    }
+                    
+                    //Formulario para realizar reserva
+                    out.println("<form method=\"post\" action=\"" + request.getContextPath() + request.getServletPath() + "/realizarReserva?CIFhotel="+request.getParameter("CIFhotel")+"\">");
+                    out.println("<div><label>DNI usuario: <input type=\"text\" name=\"dniUsu\" /></label></div>");
+                    out.println("<div><label>Numero de habitaciones: <input type=\"text\" name=\"numHab\" /></label></div>");
+                    out.println("<div><label>Tipo de habitación: <input type=\"text\" name=\"tipoHab\" /></label></div>");
+                    out.println("<div><label>Fecha de inicio: <input type=\"text\" name=\"fIni\" /></label></div>");
+                    out.println("<div><label>Fecha de fin: <input type=\"text\" name=\"fFin\" /></label></div>");
+                    out.println("<div><input type=\"submit\" name=\"reservar\" value=\"Reservar\"/><input type=\"reset\" value=\"Limpiar formulario\"/></div>");
+                    out.println("</form>");
                 }else if (action.equals("/busquedaCiudad")){
                     out.println("<h2>Búsqueda por ciudad</h2>");
                     if (request.getParameter("ciu") != null) {
@@ -228,9 +258,8 @@ public class ServletOperador extends HttpServlet {
                             out.println("<td>" + valor[i].getNombre() + "</td>");
                             out.println("<td>" + valor[i].getDireccion() + "</td>");
                             out.println("<td>" + valor[i].getCiudad() + "</td>");
-//                            out.println("<a href=\"" + request.getContextPath() + request.getServletPath() + "/listadoUsuarios?dniUsuarioEliminar=" + us.getDNI() + "\">Eliminar</a> ");
-//                            out.println("<a href=\"" + request.getContextPath() + request.getServletPath() + "/verReservas?dniUsuarioEliminar=" + us.getDNI() + "\">Ver reservas</a> ");
-//                            out.println("<a href=\"" + request.getContextPath() + request.getServletPath() + "/realizarReserva?dniUsuarioEliminar=" + us.getDNI() + "\">Realizar reserva</a> ");
+                            out.println("</td>");
+                            out.println("<td><a href=\"" + request.getContextPath() + request.getServletPath() + "/realizarReserva?CIFhotel="+valor[i].getCIF()+"\">Realizar reserva</a> </td>");
                             out.println("</td>");
                             out.println("</tr>");
                         
@@ -263,6 +292,7 @@ public class ServletOperador extends HttpServlet {
                             out.println("<td>" + valor[i].getDireccion() + "</td>");
                             out.println("<td>" + valor[i].getCiudad() + "</td>");
                             out.println("</td>");
+                            out.println("<td><a href=\"" + request.getContextPath() + request.getServletPath() + "/realizarReserva?CIFhotel="+valor[i].getCIF()+"\">Realizar reserva</a> </td>");
                             out.println("</tr>");
                         
                     }
@@ -280,13 +310,7 @@ public class ServletOperador extends HttpServlet {
                         Date f1 = sdf.parse(request.getParameter("fIni"));
                         Date f2 = sdf.parse(request.getParameter("fFin"));
                         String tipo = request.getParameter("hab");
-                        int tHab = 0;
-                        if(tipo.equals("0"))
-                            tHab = 0;
-                        if(tipo.equals("1"))
-                            tHab = 1;
-                        if(tipo.equals("2"))
-                            tHab = 2;
+                        int tHab = Integer.parseInt(request.getParameter("hab"));
                             
                         ArrayList<Hotel> listadoHoteles;
                         listadoHoteles = (ArrayList<Hotel>) op.bucarPorFecha(tHab, f1, f2);
@@ -307,7 +331,7 @@ public class ServletOperador extends HttpServlet {
                             out.println("<td>" + valor[i].getDireccion() + "</td>");
                             out.println("<td>" + valor[i].getCiudad() + "</td>");
                             out.println("</td>");
-                            out.println("</tr>");
+                            out.println("<td><a href=\"" + request.getContextPath() + request.getServletPath() + "/realizarReserva?CIFhotel="+valor[i].getCIF()+"\">Realizar reserva</a> </td>");                            out.println("</tr>");
                         
                     }
                     out.println("</table>");
