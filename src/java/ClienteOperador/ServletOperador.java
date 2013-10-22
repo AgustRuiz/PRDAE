@@ -13,6 +13,7 @@ import java.io.PrintWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -26,8 +27,9 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 /**
  *
  * @author juanpepe
+ * @author Agustín Ruiz Linares (arl00029@red.ujaen.es)
  */
-@WebServlet(name = "ServletOperador", urlPatterns = {"/ServletOperador"})
+@WebServlet(name = "ServletOperador", urlPatterns = {"/ServletOperador/*"})
 public class ServletOperador extends HttpServlet {
 
     /**
@@ -49,21 +51,21 @@ public class ServletOperador extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ServletOperador</title>");            
+            out.println("<title>Servlet ServletOperador</title>");
             out.println("</head>");
             out.println("<body>");
-            
+
             WebApplicationContext appContext = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
             ServicioOperador so = (ServicioOperador) appContext.getBean("servicioOperador");
-            
+
             //selecciono un operador
             Operador op = so.getListaOperadores().get("444A");
             out.println(op.getNombre());
-            
-            out.println("Busqueda por Ciudad 1, elementos: "+op.buscarPorCiudad("Ciudad 1").size());
-            
-            out.println("Busqueda por Hotel1, elementos: "+op.buscarPorNombre("Hotel 1").size());
-            
+
+            out.println("Busqueda por Ciudad 1, elementos: " + op.buscarPorCiudad("Ciudad 1").size());
+
+            out.println("Busqueda por Hotel1, elementos: " + op.buscarPorNombre("Hotel 1").size());
+
             //vamos a probar las reservas
             //creo 2 fechas
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -74,12 +76,92 @@ public class ServletOperador extends HttpServlet {
             op.realizarReserva(usu, hot, 6, 0, f1, f2);
             op.realizarReserva(usu, hot, 1, 0, f1, f2);
             op.realizarReserva(usu, hot, 1, 1, f1, f2);
-            out.println("Reservas en hotel: "+ServicioOperador.getListaHoteles().get("22222222B").getReservas().size());
-            
-            out.println("<h1>Servlet ServletOperador at " + request.getContextPath() + "</h1>");
+            out.println("Reservas en hotel: " + ServicioOperador.getListaHoteles().get("22222222B").getReservas().size());
+
+
+
+
+
+
+
+            //Get la string acction
+            String action = (request.getPathInfo() != null ? request.getPathInfo() : "");
+
+            out.println("<h1>Área de operador</h1>");
+            //Menú principal
+            out.println("<ul>");
+            out.println("<li><a href=\"" + request.getContextPath() + request.getServletPath() + "/altaUsuario\">Alta Cliente</a></li>");
+            out.println("<li><a href=\"" + request.getContextPath() + request.getServletPath() + "/listadoUsuarios\">Listar Clientes</a></li>");
+            out.println("</ul>");
+
+            if (action.equals("/altaUsuario")) {
+                out.println("<h2>Alta de clientes</h2>");
+                
+                
+                
+                
+                
+                //Procesando nuevo operador
+                if (request.getParameter("enviadoNuevoUsuario") != null) {
+                    try {
+                        Usuario us = new Usuario(request.getParameter("dni"), request.getParameter("nombre"), request.getParameter("direccion"));
+                        ServicioOperador.getListaUsuarios().put(request.getParameter("dni"), us);
+                        out.println("<div><strong><em>Éxito al crear el operador</em></strong></div>");
+                    } catch (Exception e) {
+                        out.println("<div><strong><em>ERROR: </em>"+e.getMessage()+"</strong></div>");
+                    }
+                }
+                //Formulario para agregar nuevo cliente
+                out.println("<form method=\"post\" action=\"" + request.getContextPath() + request.getServletPath() + "/altaUsuario\">");
+                out.println("<div><label>DNI: <input type=\"text\" name=\"dni\" /></label></div>");
+                out.println("<div><label>Nombre: <input type=\"text\" name=\"nombre\" /></label></div>");
+                out.println("<div><label>Dirección: <input type=\"text\" name=\"direccion\" /></label></div>");
+                out.println("<div><input type=\"submit\" name=\"enviadoNuevoUsuario\" value=\"Crear\"/><input type=\"reset\" value=\"Limpiar formulario\"/></div>");
+                out.println("</form>");
+            } else if (action.equals("/listadoUsuarios")) {
+                out.println("<h2>Listado de clientes</h2>");
+                //Procesando eliminar operador
+                if (request.getParameter("dniUsuarioEliminar") != null) {
+                    try {
+                        ServicioOperador.getListaUsuarios().remove(request.getParameter("dniUsuarioEliminar"));
+                        out.println("<div><strong><em>Éxito al eliminar el usuario</em></strong></div>");
+                    } catch (Exception e) {
+                        out.println("<div><strong><em>ERROR: </em>"+e.getMessage()+"</strong></div>");
+                    }
+                }
+                //Procesar lista de usuarios
+                Map<String, Usuario> listaUsuarios = ServicioOperador.getListaUsuarios();
+                out.println("<table border=\"1\">");
+                out.println("<tr>");
+                out.println("<th>DNI</th>");
+                out.println("<th>Nombre</th>");
+                out.println("<th>Dirección</th>");
+                out.println("</tr>");
+                for (Usuario us : listaUsuarios.values()) {
+                    out.println("<tr>");
+                    out.println("<td>" + us.getDNI() + "</td>");
+                    out.println("<td>" + us.getNombre() + "</td>");
+                    out.println("<td>" + us.getDireccion() + "</td>");
+                    out.println("<td>");
+                    out.println("<a href=\"" + request.getContextPath() + request.getServletPath() + "/listadoUsuarios?dniUsuarioEliminar=" + us.getDNI() + "\">Eliminar</a> ");
+                    out.println("<a href=\"" + request.getContextPath() + request.getServletPath() + "/verReservas?dniUsuarioEliminar=" + us.getDNI() + "\">Ver reservas</a> ");
+                    out.println("<a href=\"" + request.getContextPath() + request.getServletPath() + "/realizarReserva?dniUsuarioEliminar=" + us.getDNI() + "\">Realizar reserva</a> ");
+                    out.println("</td>");
+                    out.println("</tr>");
+                }
+                out.println("</table>");
+
+            } else if (action.equals("/verReservas")) {
+                out.println("<h2>Ver reservas</h2>");
+            } else if (action.equals("/realizarReserva")) {
+                out.println("<h2>Realizar reservas</h2>");
+            }
+
+
+
             out.println("</body>");
             out.println("</html>");
-        } finally {            
+        } finally {
             out.close();
         }
     }

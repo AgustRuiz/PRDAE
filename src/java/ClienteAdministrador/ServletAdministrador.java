@@ -48,7 +48,7 @@ public class ServletAdministrador extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet Servlet</title>");
+            out.println("<title>Servlet ServletAdministrador</title>");
             out.println("</head>");
             out.println("<body>");
 
@@ -72,8 +72,6 @@ public class ServletAdministrador extends HttpServlet {
 //            } catch (ErrorInsercion e) {
 //                out.println(e.getMessage());
 //            }
-
-
 
             //Get la string acction
             String action = (request.getPathInfo() != null ? request.getPathInfo() : "");
@@ -139,11 +137,6 @@ public class ServletAdministrador extends HttpServlet {
                 out.println("</table>");
 
             } else if (action.equals("/altaHotel")) {
-                
-                
-                
-                
-                
                 out.println("<h2>Alta de hotel</h2>");
                 //Procesando nuevo operador
                 if (request.getParameter("enviadoNuevoHotel") != null) {
@@ -153,6 +146,16 @@ public class ServletAdministrador extends HttpServlet {
                         hotel.setNombre(request.getParameter("nombre"));
                         hotel.setDireccion(request.getParameter("direccion"));
                         hotel.setCiudad(request.getParameter("ciudad"));
+                        int[] numHabitaciones = new int[3];
+                        numHabitaciones[0] = Integer.parseInt(request.getParameter("numHabitacionesIndividual"));
+                        numHabitaciones[1] = Integer.parseInt(request.getParameter("numHabitacionesDoble"));
+                        numHabitaciones[2] = Integer.parseInt(request.getParameter("numHabitacionesGrupo"));
+                        hotel.setNumHabitaciones(numHabitaciones);
+                        float[] precioHabitaciones = new float[3];
+                        precioHabitaciones[0] = Float.parseFloat(request.getParameter("precioHabitacionesIndividual"));
+                        precioHabitaciones[1] = Float.parseFloat(request.getParameter("precioHabitacionesDoble"));
+                        precioHabitaciones[2] = Float.parseFloat(request.getParameter("precioHabitacionesGrupo"));
+                        hotel.setPrecioHabitaciones(precioHabitaciones);
                         sa.getAdmin().altaHotel(hotel);
                         out.println("<div><strong><em>Éxito al crear el hotel</em></strong></div>");
                     } catch (ErrorInsercion e) {
@@ -166,21 +169,21 @@ public class ServletAdministrador extends HttpServlet {
                 out.println("<div><label>Dirección: <input type=\"text\" name=\"direccion\" /></label></div>");
                 out.println("<div><label>Ciudad: <input type=\"text\" name=\"ciudad\" /></label></div>");
                 
-                out.println("<div><em>La parte de las habitaciones y el precio hay que trabajarlo porque no me queda claro (Agustín Ruiz)</em></div>");
+                out.println("<div>"
+                        + "<label>Número habitaciones individuales: <input type=\"text\" name=\"numHabitacionesIndividual\" /></label>"
+                        + "<label>Precio: <input type=\"text\" name=\"precioHabitacionesIndividual\" />€</label>"
+                        + "</div>");
+                out.println("<div>"
+                        + "<label>Número habitaciones dobles: <input type=\"text\" name=\"numHabitacionesDoble\" /></label>"
+                        + "<label>Precio: <input type=\"text\" name=\"precioHabitacionesDoble\" />€</label>"
+                        + "</div>");
+                out.println("<div>"
+                        + "<label>Número habitaciones grupo/niños: <input type=\"text\" name=\"numHabitacionesGrupo\" /></label>"
+                        + "<label>Precio: <input type=\"text\" name=\"precioHabitacionesGrupo\" />€</label>"
+                        + "</div>");
                 
                 out.println("<div><input type=\"submit\" name=\"enviadoNuevoHotel\" value=\"Crear\"/><input type=\"reset\" value=\"Limpiar formulario\"/></div>");
                 out.println("</form>");
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
             } else if (action.equals("/listadoHoteles")) {
                 out.println("<h2>Listado de hoteles</h2>");
                 //Procesando nuevo hotel
@@ -200,31 +203,38 @@ public class ServletAdministrador extends HttpServlet {
                 out.println("<th>Ciudad</th>");
                 out.println("<th>Dirección</th>");
                 out.println("<th>CIF</th>");
+                out.println("<th colspan=\"2\">Habitaciones</th>");
+                out.println("<th>Precio</th>");
                 out.println("<th>Operaciones</th>");
                 out.println("</tr>");
                 for (Hotel hotel : listaHoteles.values()) {
                     out.println("<tr>");
-                    out.println("<td>" + hotel.getNombre() + "</td>");
-                    out.println("<td>" + hotel.getCiudad() + "</td>");
-                    out.println("<td>" + hotel.getDireccion() + "</td>");
-                    out.println("<td>" + hotel.getCIF() + "</td>");
-                    out.println("<td>");
+                    out.println("<td rowspan=\"3\">" + hotel.getNombre() + "</td>");
+                    out.println("<td rowspan=\"3\">" + hotel.getCiudad() + "</td>");
+                    out.println("<td rowspan=\"3\">" + hotel.getDireccion() + "</td>");
+                    out.println("<td rowspan=\"3\">" + hotel.getCIF() + "</td>");
+                    out.println("<th>Individuales</th>");
+                    out.println("<td>" + hotel.getNumHabitaciones()[0] + "</td>");
+                    out.println("<td>" + hotel.getPrecioHabitaciones()[0]+ " €</td>");
+                    out.println("<td rowspan=\"3\">");
                     out.println("<a href=\"" + request.getContextPath() + request.getServletPath() + "/listadoHoteles?cifHotelEliminar=" + hotel.getCIF() + "\">Eliminar</a>");
                     out.println("</td>");
+                    out.println("</tr>");
+                    out.println("<tr>");
+                    out.println("<th>Dobles</th>");
+                    out.println("<td>" + hotel.getNumHabitaciones()[1] + "</td>");
+                    out.println("<td>" + hotel.getPrecioHabitaciones()[1]+ " €</td>");
+                    out.println("</tr>");
+                    out.println("<tr>");
+                    out.println("<th>Grupo/Niños</th>");
+                    out.println("<td>" + hotel.getNumHabitaciones()[2] + "</td>");
+                    out.println("<td>" + hotel.getPrecioHabitaciones()[2]+ " €</td>");
                     out.println("</tr>");
                 }
                 out.println("</table>");
             } else {
                 out.println("<div>Seleccione alguna opción del menú</div>");
             }
-
-
-
-
-
-
-
-
             out.println("</body>");
             out.println("</html>");
         } finally {
