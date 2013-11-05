@@ -10,9 +10,11 @@ import es.ujaen.dae.galisteo_ruiz.hoteles.beans.ServicioAdministrador;
 import es.ujaen.dae.galisteo_ruiz.hoteles.excepciones.ErrorInsercion;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -42,102 +44,72 @@ public class ServletAdministrador extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, Exception {
         response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter();
+
+        //PrintWriter out = response.getWriter();
+
+        String action = (request.getPathInfo() != null ? request.getPathInfo() : "");
+        String srvUrl = request.getContextPath() + request.getServletPath();
+
+        RequestDispatcher rd;
+        request.setAttribute("srvUrl", srvUrl);
+
         try {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet ServletAdministrador</title>");
-            out.println("</head>");
-            out.println("<body>");
 
             WebApplicationContext appContext = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
-            ServicioAdministrador sa = (ServicioAdministrador) appContext.getBean("servicioAdministrador");
-
-//            out.println(sa.getListaHoteles().size());
-//            //prueba creación de objetos
-//            Hotel hot = new Hotel();
-//            sa.getAdmin().altaHotel(hot);
-//            //prueba borrado de objetos
-//            sa.getAdmin().bajaHotel("11111111A");
-//            sa.getAdmin().bajaHotel("22222222B");
-//            out.println(sa.getListaHoteles().size());
-
-
-            //Pruebas para insertar un nuevo operador
-//            try {
-//                Operador op = new Operador("444B", "david", "direccion");
-//                sa.getAdmin().altaOperador(op);
-//            } catch (ErrorInsercion e) {
-//                out.println(e.getMessage());
-//            }
-
-            //Get la string acction
-            String action = (request.getPathInfo() != null ? request.getPathInfo() : "");
-
-            out.println("<h1>Área de Administración</h1>");
-            //Menú principal
-            out.println("<ul>");
-            out.println("<li><a href=\"" + request.getContextPath() + request.getServletPath() + "/altaOperador\">Alta Operador</a></li>");
-            out.println("<li><a href=\"" + request.getContextPath() + request.getServletPath() + "/listadoOperadores\">Listar Operadores</a></li>");
-            out.println("<li><a href=\"" + request.getContextPath() + request.getServletPath() + "/altaHotel\">Alta Hotel</a></li>");
-            out.println("<li><a href=\"" + request.getContextPath() + request.getServletPath() + "/listadoHoteles\">Listar Hoteles</a></li>");
-            out.println("</ul>");
+            //ServicioAdministrador sa = (ServicioAdministrador) appContext.getBean("servicioAdministrador");
 
             if (action.equals("/altaOperador")) {
-                out.println("<h2>Alta de operador</h2>");
+
+//                out.println("<h2>Alta de operador</h2>");
                 //Procesando nuevo operador
                 if (request.getParameter("enviadoNuevoOperador") != null) {
                     try {
                         Operador op = new Operador(request.getParameter("cif"), request.getParameter("nombre"), request.getParameter("direccion"));
-                        sa.getAdmin().altaOperador(op);
-                        out.println("<div><strong><em>Éxito al crear el operador</em></strong></div>");
+                        ServicioAdministrador.getAdmin().altaOperador(op);
+                        request.setAttribute("respuesta", "ok");
                     } catch (ErrorInsercion e) {
-                        out.println("<div><strong><em>ERROR: </em>"+e.getMessage()+"</strong></div>");
+                        request.setAttribute("respuesta", "error");
                     }
                 }
-                //Formulario para agregar nuevo cliente
-                out.println("<form method=\"post\" action=\"" + request.getContextPath() + request.getServletPath() + "/altaOperador\">");
-                out.println("<div><label>Nombre: <input type=\"text\" name=\"nombre\" /></label></div>");
-                out.println("<div><label>Dirección: <input type=\"text\" name=\"direccion\" /></label></div>");
-                out.println("<div><label>CIF: <input type=\"text\" name=\"cif\" /></label></div>");
-                out.println("<div><input type=\"submit\" name=\"enviadoNuevoOperador\" value=\"Crear\"/><input type=\"reset\" value=\"Limpiar formulario\"/></div>");
-                out.println("</form>");
+                rd = request.getRequestDispatcher("/WEB-INF/administrador/altaOperador.jsp");
+                rd.forward(request, response);
             } else if (action.equals("/listadoOperadores")) {
-                out.println("<h2>Listado de operadores</h2>");
+//                out.println("<h2>Listado de operadores</h2>");
                 //Procesando nuevo operador
                 if (request.getParameter("cifOperadorEliminar") != null) {
                     try {
-                        sa.getAdmin().bajaOperador(request.getParameter("cifOperadorEliminar"));
-                        out.println("<div><strong><em>Éxito al eliminar el operador</em></strong></div>");
+                        ServicioAdministrador.getAdmin().bajaOperador(request.getParameter("cifOperadorEliminar"));
+                        request.setAttribute("eliminarOperador", true);      
+                        request.setAttribute("nombreOperador", request.getParameter("nombreOperador"));
                     } catch (Exception e) {
-                        out.println("<div><strong><em>ERROR: </em>"+e.getMessage()+"</strong></div>");
+                        request.setAttribute("eliminarOperador", false);
                     }
                 }
                 //Procesar lista de operadores
-                Map<String, Operador> listaOperadores = sa.getListaOperadores();
-                out.println("<table border=\"1\">");
-                out.println("<tr>");
-                out.println("<th>Nombre</th>");
-                out.println("<th>Dirección</th>");
-                out.println("<th>CIF</th>");
-                out.println("<th>Operaciones</th>");
-                out.println("</tr>");
+                Map<String, Operador> listaOperadores = ServicioAdministrador.getListaOperadores();
+                request.setAttribute("listaOperadores", listaOperadores);
+
                 for (Operador op : listaOperadores.values()) {
-                    out.println("<tr>");
-                    out.println("<td>" + op.getNombre() + "</td>");
-                    out.println("<td>" + op.getDireccion() + "</td>");
-                    out.println("<td>" + op.getCIF() + "</td>");
-                    out.println("<td>");
-                    out.println("<a href=\"" + request.getContextPath() + request.getServletPath() + "/listadoOperadores?cifOperadorEliminar=" + op.getCIF() + "\">Eliminar</a>");
-                    out.println("</td>");
-                    out.println("</tr>");
+//                    out.println("<tr>");
+//                    out.println("<td>" + op.getNombre() + "</td>");
+//                    out.println("<td>" + op.getDireccion() + "</td>");
+//                    out.println("<td>" + op.getCIF() + "</td>");
+//                    out.println("<td>");
+//                    out.println("<a href=\"" + request.getContextPath() + request.getServletPath() + "/listadoOperadores?cifOperadorEliminar=" + op.getCIF() + "\">Eliminar</a>");
+//                    out.println("</td>");
+//                    out.println("</tr>");
                 }
-                out.println("</table>");
+//                out.println("</table>");
+
+
+
+
+
+                rd = request.getRequestDispatcher("/WEB-INF/administrador/listadoOperadores.jsp");
+                rd.forward(request, response);
 
             } else if (action.equals("/altaHotel")) {
-                out.println("<h2>Alta de hotel</h2>");
+//                out.println("<h2>Alta de hotel</h2>");
                 //Procesando nuevo operador
                 if (request.getParameter("enviadoNuevoHotel") != null) {
                     try {
@@ -156,89 +128,108 @@ public class ServletAdministrador extends HttpServlet {
                         precioHabitaciones[1] = Float.parseFloat(request.getParameter("precioHabitacionesDoble"));
                         precioHabitaciones[2] = Float.parseFloat(request.getParameter("precioHabitacionesGrupo"));
                         hotel.setPrecioHabitaciones(precioHabitaciones);
-                        sa.getAdmin().altaHotel(hotel);
-                        out.println("<div><strong><em>Éxito al crear el hotel</em></strong></div>");
+                        ServicioAdministrador.getAdmin().altaHotel(hotel);
+//                        out.println("<div><strong><em>Éxito al crear el hotel</em></strong></div>");
                     } catch (ErrorInsercion e) {
-                        out.println("<div><strong><em>ERROR: </em>"+e.getMessage()+"</strong></div>");
+//                        out.println("<div><strong><em>ERROR: </em>" + e.getMessage() + "</strong></div>");
                     }
                 }
                 //Formulario para agregar nuevo cliente
-                out.println("<form method=\"post\" action=\"" + request.getContextPath() + request.getServletPath() + "/altaHotel\">");
-                out.println("<div><label>CIF: <input type=\"text\" name=\"cif\" /></label></div>");
-                out.println("<div><label>Nombre: <input type=\"text\" name=\"nombre\" /></label></div>");
-                out.println("<div><label>Dirección: <input type=\"text\" name=\"direccion\" /></label></div>");
-                out.println("<div><label>Ciudad: <input type=\"text\" name=\"ciudad\" /></label></div>");
-                
-                out.println("<div>"
-                        + "<label>Número habitaciones individuales: <input type=\"text\" name=\"numHabitacionesIndividual\" /></label>"
-                        + "<label>Precio: <input type=\"text\" name=\"precioHabitacionesIndividual\" />€</label>"
-                        + "</div>");
-                out.println("<div>"
-                        + "<label>Número habitaciones dobles: <input type=\"text\" name=\"numHabitacionesDoble\" /></label>"
-                        + "<label>Precio: <input type=\"text\" name=\"precioHabitacionesDoble\" />€</label>"
-                        + "</div>");
-                out.println("<div>"
-                        + "<label>Número habitaciones grupo/niños: <input type=\"text\" name=\"numHabitacionesGrupo\" /></label>"
-                        + "<label>Precio: <input type=\"text\" name=\"precioHabitacionesGrupo\" />€</label>"
-                        + "</div>");
-                
-                out.println("<div><input type=\"submit\" name=\"enviadoNuevoHotel\" value=\"Crear\"/><input type=\"reset\" value=\"Limpiar formulario\"/></div>");
-                out.println("</form>");
+//                out.println("<form method=\"post\" action=\"" + request.getContextPath() + request.getServletPath() + "/altaHotel\">");
+//                out.println("<div><label>CIF: <input type=\"text\" name=\"cif\" /></label></div>");
+//                out.println("<div><label>Nombre: <input type=\"text\" name=\"nombre\" /></label></div>");
+//                out.println("<div><label>Dirección: <input type=\"text\" name=\"direccion\" /></label></div>");
+//                out.println("<div><label>Ciudad: <input type=\"text\" name=\"ciudad\" /></label></div>");
+
+//                out.println("<div>"
+//                        + "<label>Número habitaciones individuales: <input type=\"text\" name=\"numHabitacionesIndividual\" /></label>"
+//                        + "<label>Precio: <input type=\"text\" name=\"precioHabitacionesIndividual\" />€</label>"
+//                        + "</div>");
+//                out.println("<div>"
+//                        + "<label>Número habitaciones dobles: <input type=\"text\" name=\"numHabitacionesDoble\" /></label>"
+//                        + "<label>Precio: <input type=\"text\" name=\"precioHabitacionesDoble\" />€</label>"
+//                        + "</div>");
+//                out.println("<div>"
+//                        + "<label>Número habitaciones grupo/niños: <input type=\"text\" name=\"numHabitacionesGrupo\" /></label>"
+//                        + "<label>Precio: <input type=\"text\" name=\"precioHabitacionesGrupo\" />€</label>"
+//                        + "</div>");
+//
+//                out.println("<div><input type=\"submit\" name=\"enviadoNuevoHotel\" value=\"Crear\"/><input type=\"reset\" value=\"Limpiar formulario\"/></div>");
+//                out.println("</form>");
+
+
+
+
+
+                rd = request.getRequestDispatcher("/WEB-INF/administrador/altaHotel.jsp");
+                rd.forward(request, response);
             } else if (action.equals("/listadoHoteles")) {
-                out.println("<h2>Listado de hoteles</h2>");
+//                out.println("<h2>Listado de hoteles</h2>");
                 //Procesando nuevo hotel
                 if (request.getParameter("cifHotelEliminar") != null) {
                     try {
-                        sa.getAdmin().bajaHotel(request.getParameter("cifHotelEliminar"));
-                        out.println("<div><strong><em>Éxito al eliminar el hotel</em></strong></div>");
+                        ServicioAdministrador.getAdmin().bajaHotel(request.getParameter("cifHotelEliminar"));
+//                        out.println("<div><strong><em>Éxito al eliminar el hotel</em></strong></div>");
                     } catch (Exception e) {
-                        out.println("<div><strong><em>ERROR: </em>"+e.getMessage()+"</strong></div>");
+//                        out.println("<div><strong><em>ERROR: </em>" + e.getMessage() + "</strong></div>");
                     }
                 }
                 //Procesar lista de hoteles
-                Map<String, Hotel> listaHoteles = sa.getListaHoteles();
-                out.println("<table border=\"1\">");
-                out.println("<tr>");
-                out.println("<th>Nombre</th>");
-                out.println("<th>Ciudad</th>");
-                out.println("<th>Dirección</th>");
-                out.println("<th>CIF</th>");
-                out.println("<th colspan=\"2\">Habitaciones</th>");
-                out.println("<th>Precio</th>");
-                out.println("<th>Operaciones</th>");
-                out.println("</tr>");
+                Map<String, Hotel> listaHoteles = ServicioAdministrador.getListaHoteles();
+//                out.println("<table border=\"1\">");
+//                out.println("<tr>");
+//                out.println("<th>Nombre</th>");
+//                out.println("<th>Ciudad</th>");
+//                out.println("<th>Dirección</th>");
+//                out.println("<th>CIF</th>");
+//                out.println("<th colspan=\"2\">Habitaciones</th>");
+//                out.println("<th>Precio</th>");
+//                out.println("<th>Operaciones</th>");
+//                out.println("</tr>");
                 for (Hotel hotel : listaHoteles.values()) {
-                    out.println("<tr>");
-                    out.println("<td rowspan=\"3\">" + hotel.getNombre() + "</td>");
-                    out.println("<td rowspan=\"3\">" + hotel.getCiudad() + "</td>");
-                    out.println("<td rowspan=\"3\">" + hotel.getDireccion() + "</td>");
-                    out.println("<td rowspan=\"3\">" + hotel.getCIF() + "</td>");
-                    out.println("<th>Individuales</th>");
-                    out.println("<td>" + hotel.getNumHabitaciones()[0] + "</td>");
-                    out.println("<td>" + hotel.getPrecioHabitaciones()[0]+ " €</td>");
-                    out.println("<td rowspan=\"3\">");
-                    out.println("<a href=\"" + request.getContextPath() + request.getServletPath() + "/listadoHoteles?cifHotelEliminar=" + hotel.getCIF() + "\">Eliminar</a>");
-                    out.println("</td>");
-                    out.println("</tr>");
-                    out.println("<tr>");
-                    out.println("<th>Dobles</th>");
-                    out.println("<td>" + hotel.getNumHabitaciones()[1] + "</td>");
-                    out.println("<td>" + hotel.getPrecioHabitaciones()[1]+ " €</td>");
-                    out.println("</tr>");
-                    out.println("<tr>");
-                    out.println("<th>Grupo/Niños</th>");
-                    out.println("<td>" + hotel.getNumHabitaciones()[2] + "</td>");
-                    out.println("<td>" + hotel.getPrecioHabitaciones()[2]+ " €</td>");
-                    out.println("</tr>");
+//                    out.println("<tr>");
+//                    out.println("<td rowspan=\"3\">" + hotel.getNombre() + "</td>");
+//                    out.println("<td rowspan=\"3\">" + hotel.getCiudad() + "</td>");
+//                    out.println("<td rowspan=\"3\">" + hotel.getDireccion() + "</td>");
+//                    out.println("<td rowspan=\"3\">" + hotel.getCIF() + "</td>");
+//                    out.println("<th>Individuales</th>");
+//                    out.println("<td>" + hotel.getNumHabitaciones()[0] + "</td>");
+//                    out.println("<td>" + hotel.getPrecioHabitaciones()[0] + " €</td>");
+//                    out.println("<td rowspan=\"3\">");
+//                    out.println("<a href=\"" + request.getContextPath() + request.getServletPath() + "/listadoHoteles?cifHotelEliminar=" + hotel.getCIF() + "\">Eliminar</a>");
+//                    out.println("</td>");
+//                    out.println("</tr>");
+//                    out.println("<tr>");
+//                    out.println("<th>Dobles</th>");
+//                    out.println("<td>" + hotel.getNumHabitaciones()[1] + "</td>");
+//                    out.println("<td>" + hotel.getPrecioHabitaciones()[1] + " €</td>");
+//                    out.println("</tr>");
+//                    out.println("<tr>");
+//                    out.println("<th>Grupo/Niños</th>");
+//                    out.println("<td>" + hotel.getNumHabitaciones()[2] + "</td>");
+//                    out.println("<td>" + hotel.getPrecioHabitaciones()[2] + " €</td>");
+//                    out.println("</tr>");
                 }
-                out.println("</table>");
-            } else {
-                out.println("<div>Seleccione alguna opción del menú</div>");
+//                out.println("</table>");
+
+
+
+                rd = request.getRequestDispatcher("/WEB-INF/administrador/listadoHoteles.jsp");
+                rd.forward(request, response);
+
+            } else { //Home
+                rd = request.getRequestDispatcher("/WEB-INF/administrador/indexAdministrador.jsp");
+                rd.forward(request, response);
             }
-            out.println("</body>");
-            out.println("</html>");
+
+
+
+
+
+
+
         } finally {
-            out.close();
+//            out.close();
         }
     }
 
