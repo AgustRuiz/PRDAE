@@ -54,13 +54,7 @@ public class ServletAdministrador extends HttpServlet {
         request.setAttribute("srvUrl", srvUrl);
 
         try {
-
-            WebApplicationContext appContext = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
-            //ServicioAdministrador sa = (ServicioAdministrador) appContext.getBean("servicioAdministrador");
-
             if (action.equals("/altaOperador")) {
-
-//                out.println("<h2>Alta de operador</h2>");
                 //Procesando nuevo operador
                 if (request.getParameter("enviadoNuevoOperador") != null) {
                     try {
@@ -74,7 +68,6 @@ public class ServletAdministrador extends HttpServlet {
                 rd = request.getRequestDispatcher("/WEB-INF/administrador/altaOperador.jsp");
                 rd.forward(request, response);
             } else if (action.equals("/listadoOperadores")) {
-//                out.println("<h2>Listado de operadores</h2>");
                 //Procesando nuevo operador
                 if (request.getParameter("cifOperadorEliminar") != null) {
                     try {
@@ -88,30 +81,11 @@ public class ServletAdministrador extends HttpServlet {
                 //Procesar lista de operadores
                 Map<String, Operador> listaOperadores = ServicioAdministrador.getListaOperadores();
                 request.setAttribute("listaOperadores", listaOperadores);
-
-                for (Operador op : listaOperadores.values()) {
-//                    out.println("<tr>");
-//                    out.println("<td>" + op.getNombre() + "</td>");
-//                    out.println("<td>" + op.getDireccion() + "</td>");
-//                    out.println("<td>" + op.getCIF() + "</td>");
-//                    out.println("<td>");
-//                    out.println("<a href=\"" + request.getContextPath() + request.getServletPath() + "/listadoOperadores?cifOperadorEliminar=" + op.getCIF() + "\">Eliminar</a>");
-//                    out.println("</td>");
-//                    out.println("</tr>");
-                }
-//                out.println("</table>");
-
-
-
-
-
                 rd = request.getRequestDispatcher("/WEB-INF/administrador/listadoOperadores.jsp");
                 rd.forward(request, response);
-
             } else if (action.equals("/altaHotel")) {
-//                out.println("<h2>Alta de hotel</h2>");
                 //Procesando nuevo operador
-                if (request.getParameter("enviadoNuevoHotel") != null) {
+                if (request.getParameter("enviadoNuevoHotel") != null) {//*
                     try {
                         Hotel hotel = new Hotel();
                         hotel.setCIF(request.getParameter("cif"));
@@ -121,49 +95,27 @@ public class ServletAdministrador extends HttpServlet {
                         int[] numHabitaciones = new int[3];
                         numHabitaciones[0] = Integer.parseInt(request.getParameter("numHabitacionesIndividual"));
                         numHabitaciones[1] = Integer.parseInt(request.getParameter("numHabitacionesDoble"));
-                        numHabitaciones[2] = Integer.parseInt(request.getParameter("numHabitacionesGrupo"));
+                        numHabitaciones[2] = Integer.parseInt(request.getParameter("numHabitacionesTriple"));
                         hotel.setNumHabitaciones(numHabitaciones);
                         float[] precioHabitaciones = new float[3];
                         precioHabitaciones[0] = Float.parseFloat(request.getParameter("precioHabitacionesIndividual"));
                         precioHabitaciones[1] = Float.parseFloat(request.getParameter("precioHabitacionesDoble"));
-                        precioHabitaciones[2] = Float.parseFloat(request.getParameter("precioHabitacionesGrupo"));
+                        precioHabitaciones[2] = Float.parseFloat(request.getParameter("precioHabitacionesTriple"));
                         hotel.setPrecioHabitaciones(precioHabitaciones);
                         ServicioAdministrador.getAdmin().altaHotel(hotel);
-//                        out.println("<div><strong><em>Éxito al crear el hotel</em></strong></div>");
+                        request.setAttribute("respuesta", "ok");
                     } catch (ErrorInsercion e) {
-//                        out.println("<div><strong><em>ERROR: </em>" + e.getMessage() + "</strong></div>");
+                        request.setAttribute("respuesta", "error");
                     }
                 }
-                //Formulario para agregar nuevo cliente
-//                out.println("<form method=\"post\" action=\"" + request.getContextPath() + request.getServletPath() + "/altaHotel\">");
-//                out.println("<div><label>CIF: <input type=\"text\" name=\"cif\" /></label></div>");
-//                out.println("<div><label>Nombre: <input type=\"text\" name=\"nombre\" /></label></div>");
-//                out.println("<div><label>Dirección: <input type=\"text\" name=\"direccion\" /></label></div>");
-//                out.println("<div><label>Ciudad: <input type=\"text\" name=\"ciudad\" /></label></div>");
-
-//                out.println("<div>"
-//                        + "<label>Número habitaciones individuales: <input type=\"text\" name=\"numHabitacionesIndividual\" /></label>"
-//                        + "<label>Precio: <input type=\"text\" name=\"precioHabitacionesIndividual\" />€</label>"
-//                        + "</div>");
-//                out.println("<div>"
-//                        + "<label>Número habitaciones dobles: <input type=\"text\" name=\"numHabitacionesDoble\" /></label>"
-//                        + "<label>Precio: <input type=\"text\" name=\"precioHabitacionesDoble\" />€</label>"
-//                        + "</div>");
-//                out.println("<div>"
-//                        + "<label>Número habitaciones grupo/niños: <input type=\"text\" name=\"numHabitacionesGrupo\" /></label>"
-//                        + "<label>Precio: <input type=\"text\" name=\"precioHabitacionesGrupo\" />€</label>"
-//                        + "</div>");
-//
-//                out.println("<div><input type=\"submit\" name=\"enviadoNuevoHotel\" value=\"Crear\"/><input type=\"reset\" value=\"Limpiar formulario\"/></div>");
-//                out.println("</form>");
-
-
-
-
-
                 rd = request.getRequestDispatcher("/WEB-INF/administrador/altaHotel.jsp");
                 rd.forward(request, response);
             } else if (action.equals("/listadoHoteles")) {
+                
+                
+                
+                
+                
 //                out.println("<h2>Listado de hoteles</h2>");
                 //Procesando nuevo hotel
                 if (request.getParameter("cifHotelEliminar") != null) {
@@ -175,7 +127,7 @@ public class ServletAdministrador extends HttpServlet {
                     }
                 }
                 //Procesar lista de hoteles
-                Map<String, Hotel> listaHoteles = ServicioAdministrador.getListaHoteles();
+//                Map<String, Hotel> listaHoteles = ServicioAdministrador.getListaHoteles();
 //                out.println("<table border=\"1\">");
 //                out.println("<tr>");
 //                out.println("<th>Nombre</th>");
@@ -186,7 +138,7 @@ public class ServletAdministrador extends HttpServlet {
 //                out.println("<th>Precio</th>");
 //                out.println("<th>Operaciones</th>");
 //                out.println("</tr>");
-                for (Hotel hotel : listaHoteles.values()) {
+//                for (Hotel hotel : listaHoteles.values()) {
 //                    out.println("<tr>");
 //                    out.println("<td rowspan=\"3\">" + hotel.getNombre() + "</td>");
 //                    out.println("<td rowspan=\"3\">" + hotel.getCiudad() + "</td>");
@@ -209,25 +161,28 @@ public class ServletAdministrador extends HttpServlet {
 //                    out.println("<td>" + hotel.getNumHabitaciones()[2] + "</td>");
 //                    out.println("<td>" + hotel.getPrecioHabitaciones()[2] + " €</td>");
 //                    out.println("</tr>");
-                }
+//                }
 //                out.println("</table>");
 
 
+                Map<String, Hotel> listaHoteles = ServicioAdministrador.getListaHoteles();
+                request.setAttribute("listaHoteles", listaHoteles);
 
                 rd = request.getRequestDispatcher("/WEB-INF/administrador/listadoHoteles.jsp");
                 rd.forward(request, response);
 
+                
+                
+                
+                
+                
+                
+                
+                
             } else { //Home
                 rd = request.getRequestDispatcher("/WEB-INF/administrador/indexAdministrador.jsp");
                 rd.forward(request, response);
             }
-
-
-
-
-
-
-
         } finally {
 //            out.close();
         }

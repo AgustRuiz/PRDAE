@@ -31,13 +31,15 @@
             <!-- Contenido -->
 
             <c:if test="${eliminarOperador == 'true'}">
-                <div class="alert alert-success">
-                    ¡El operador "${nombreOperador}" ha sido eliminado del sistema!
+                <div class="alert alert-success fade in">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    <strong>¡Éxito!</strong> El operador "${nombreOperador}" ha sido eliminado del sistema
                 </div>
             </c:if>
             <c:if test="${eliminarOperador == 'false'}">
-                <div class="alert alert-danger">
-                    No se ha podido eliminar el operador
+                <div class="alert alert-danger fade in">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    <strong>¡Oops!</strong> No se ha podido eliminar el operador
                 </div>
             </c:if>
 

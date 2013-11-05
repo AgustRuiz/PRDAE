@@ -30,19 +30,19 @@
             <!-- Contenido -->
 
             <c:if test="${respuesta == 'ok'}">
-                <div class="alert alert-success">
-                    ¡El operador ha sido creado correctamente!
+                <div class="alert alert-success fade in">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    <strong>¡Éxito!</strong> El operador ha sido creado correctamente
                 </div>
             </c:if>
             <c:if test="${respuesta == 'error'}">
-                <div class="alert alert-danger">
-                    El operador no ha podido ser creado. Inténtelo de nuevo.
+                <div class="alert alert-danger fade in">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    <strong>¡Oops!</strong> El operador no ha podido ser creado. Inténtelo de nuevo.
                 </div>
             </c:if>
 
             <form class="form-horizontal" role="form" method="post" action="../ServletAdministrador/altaOperador">
-                
-                
                 <div class="form-group">
                     <label for="nombre" class="col-sm-2 control-label">Nombre</label>
                     <div class="col-sm-10">
